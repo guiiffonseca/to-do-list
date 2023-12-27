@@ -14,7 +14,7 @@ export default function Table({ toDoList }: Props) {
           {toDoList.map((task) => {
             return (
               <tr key={task.index}>
-                <td>{task.name}</td>
+                <td key={task.index}>{task.name}</td>
               </tr>
             );
           })}

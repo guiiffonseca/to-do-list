@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { List } from './types/list';
 import { Event } from './types/event';
 import Table from './components/Table';
@@ -6,12 +6,12 @@ import Button from './components/Button';
 import Input from './components/Input';
 
 export default function ToDoList() {
+  const [toDoList, setToDoList] = useState<List[]>([]);
   const [task, setTask] = useState<List>({
     name: '',
     date: '',
     time: '',
   });
-  const [toDoList, setToDoList] = useState<List[]>([]);
 
   const handleInputChange = useCallback(
     (e: Event) => {
@@ -23,16 +23,21 @@ export default function ToDoList() {
   );
 
   const handleSubmit = useCallback(() => {
-    // setToDoList([...toDoList, { name: task.name, index: toDoList.length }]);
-    // setTask({});
+    setToDoList([
+      ...toDoList,
+      {
+        index: toDoList.length + 1,
+        name: task.name,
+        date: task.date,
+        time: task.time,
+      },
+    ]);
+
+    setTask({ name: '', date: '', time: '' });
   }, [task, toDoList]);
 
   const handleReset = useCallback(() => {
     setToDoList([]);
-  }, []);
-
-  useEffect(() => {
-    return () => setToDoList([]);
   }, []);
 
   return (
