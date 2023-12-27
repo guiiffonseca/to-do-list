@@ -1,6 +1,6 @@
 interface Props {
   text: string;
-  isDisabled: true | false;
+  isDisabled: () => boolean;
   onSubmit: () => void;
 }
 
@@ -10,7 +10,7 @@ export default function Button({ text, isDisabled, onSubmit }: Props) {
       type="button"
       className="btn btn-success"
       onClick={onSubmit}
-      disabled={isDisabled}
+      disabled={isDisabled()}
     >
       {text}
     </button>

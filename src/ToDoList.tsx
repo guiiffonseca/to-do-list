@@ -22,6 +22,16 @@ export default function ToDoList() {
     [task]
   );
 
+  const isDisaledSubmitButton = useCallback(() => {
+    if (task.name && task.date && task.time) return false;
+    return true;
+  }, [task.name, task.date, task.time]);
+
+  const isDisaledResetButton = useCallback(() => {
+    if (toDoList.length) return false;
+    return true;
+  }, [toDoList]);
+
   const handleSubmit = useCallback(() => {
     setToDoList([
       ...toDoList,
@@ -63,13 +73,17 @@ export default function ToDoList() {
         </div>
       </div>
 
-      <Button text="Add new task" isDisabled={false} onSubmit={handleSubmit} />
+      <Button
+        text="Add new task"
+        isDisabled={isDisaledSubmitButton}
+        onSubmit={handleSubmit}
+      />
 
       <Table toDoList={toDoList} />
 
       <Button
         text="Clear tasks"
-        isDisabled={!toDoList.length && true}
+        isDisabled={isDisaledResetButton}
         onSubmit={handleReset}
       />
     </>
