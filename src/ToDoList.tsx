@@ -1,4 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { List } from './types/list';
+import Table from './components/Table';
+import Button from './components/Button';
 
 type Event = {
   target: {
@@ -6,30 +9,25 @@ type Event = {
   };
 };
 
-type List = {
-  name: string;
-  index: number | null;
-};
-
 export default function ToDoList() {
   const [task, setTask] = useState<string>('');
-  const [toDo, setToDo] = useState<List[]>([{ name: '', index: null }]);
+  const [toDoList, setToDoList] = useState<List[]>([{ name: '', index: null }]);
 
   function handleInputChange(e: Event) {
     setTask(e.target.value);
   }
 
-  function handleSubmit() {
-    setToDo([...toDo, { name: task, index: toDo.length }]);
+  const handleSubmit = useCallback(() => {
+    setToDoList([...toDoList, { name: task, index: toDoList.length }]);
     setTask('');
-  }
+  }, [task, toDoList]);
 
-  function handleReset() {
-    setToDo([]);
-  }
+  const handleReset = useCallback(() => {
+    setToDoList([]);
+  }, []);
 
   useEffect(() => {
-    return () => setToDo([]);
+    return () => setToDoList([]);
   }, []);
 
   return (
@@ -45,23 +43,15 @@ export default function ToDoList() {
           onChange={handleInputChange}
         />
       </label>
-      <button onClick={handleSubmit} disabled={!task} type="button">
-        Enter task
-      </button>
-      <ul>
-        {toDo.map((el: List) => (
-          <>
-            <input key={el.index} value={el.name} />
-            <button type="button" onClick={() => console.log('updatedS')}>
-              Edit
-            </button>
-            <button type="button">Del</button>
-          </>
-        ))}
-      </ul>
-      <button onClick={handleReset} disabled={!toDo.length} type="button">
-        Clear tasks
-      </button>
+      <Button text="Add new task" isDisabled={false} onSubmit={handleSubmit} />
+
+      <Table toDoList={toDoList} />
+
+      <Button
+        text="Clear tasks"
+        isDisabled={!toDoList.length && true}
+        onSubmit={handleReset}
+      />
     </>
   );
 }
