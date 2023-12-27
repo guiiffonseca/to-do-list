@@ -1,10 +1,11 @@
 import { useCallback, useState } from 'react';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { List } from './types/list';
 import { Event } from './types/event';
+import Form from './components/Form';
 import Table from './components/Table';
 import Button from './components/Button';
-import Input from './components/Input';
+import Modal from './components/Modal';
 
 export default function ToDoList() {
   const [toDoList, setToDoList] = useState<List[]>([]);
@@ -41,6 +42,19 @@ export default function ToDoList() {
     setTask({ name: '', date: '', time: '' });
   }, [task, toDoList]);
 
+  const handleUpdate = useCallback(
+    (id: number | null | undefined) => {
+      if (id) {
+        const filterdTask: List[] = toDoList.filter(
+          ({ index }: List) => index === id
+        );
+
+        setTask(filterdTask[0]);
+      }
+    },
+    [toDoList]
+  );
+
   const handleReset = useCallback(() => {
     setToDoList([]);
   }, []);
@@ -57,28 +71,13 @@ export default function ToDoList() {
 
   return (
     <div className="container mt-5">
-      <ToastContainer />
       <div className="d-flex justify-content-center">
         <h1 className="align-self-center">To do list</h1>
       </div>
 
       <div className="row mt-5 d-flex justify-content-center">
-        <div className="col-md">
-          <Input
-            type="text"
-            placeholder="Insert your task"
-            onChage={handleInputChange}
-            value={task.name}
-          />
-        </div>
+        <Form value={task} onChage={(e: Event) => handleInputChange(e)} />
 
-        <div className="col-sm">
-          <Input type="date" onChage={handleInputChange} value={task.date} />
-        </div>
-
-        <div className="col-sm">
-          <Input type="time" onChage={handleInputChange} value={task.time} />
-        </div>
         <div className="col-sm d-flex justify-content-around">
           <Button
             text="Add new task"
@@ -94,8 +93,10 @@ export default function ToDoList() {
       </div>
 
       <div className="mt-5">
-        <Table toDoList={toDoList} />
+        <Table toDoList={toDoList} updateTask={handleUpdate} />
       </div>
+
+      <Modal data={task} onChage={(e: Event) => handleInputChange(e)} />
     </div>
   );
 }

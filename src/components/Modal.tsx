@@ -1,32 +1,40 @@
-export default function Modal() {
+import { Event } from '../types/event';
+import { List } from '../types/list';
+import Form from './Form';
+
+interface Props {
+  data: List;
+  onChage: (e: Event) => void;
+}
+
+export default function Modal({ data, onChage }: Props) {
   return (
-    <div className="modal" tabIndex={-1} role="dialog">
-      <div className="modal-dialog" role="document">
+    <div
+      className="modal fade"
+      id="exampleModal"
+      tabIndex={-1}
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div className="modal-dialog modal-xl">
         <div className="modal-content">
           <div className="modal-header">
-            <h5 className="modal-title">Modal title</h5>
+            <h5 className="modal-title" id="exampleModalLabel">
+              {`Update task #${data.index}`}
+            </h5>
             <button
               type="button"
-              className="close"
-              data-dismiss="modal"
+              className="btn-close"
+              data-bs-dismiss="modal"
               aria-label="Close"
-            >
-              <span aria-hidden="true">&times;</span>
-            </button>
+            />
           </div>
-          <div className="modal-body">
-            <p>Modal body text goes here.</p>
+          <div className="modal-body my-2 d-flex">
+            <Form value={data} onChage={onChage} />
           </div>
           <div className="modal-footer">
-            <button type="button" className="btn btn-primary">
+            <button type="button" className="btn btn-success">
               Save changes
-            </button>
-            <button
-              type="button"
-              className="btn btn-secondary"
-              data-dismiss="modal"
-            >
-              Close
             </button>
           </div>
         </div>
