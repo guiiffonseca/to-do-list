@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react';
+import { toast, ToastContainer } from 'react-toastify';
 import { List } from './types/list';
 import { Event } from './types/event';
 import Table from './components/Table';
@@ -33,6 +34,10 @@ export default function ToDoList() {
       },
     ]);
 
+    toast.success('Task added successfully!', {
+      position: toast.POSITION.TOP_RIGHT,
+    });
+
     setTask({ name: '', date: '', time: '' });
   }, [task, toDoList]);
 
@@ -52,33 +57,34 @@ export default function ToDoList() {
 
   return (
     <div className="container mt-5">
+      <ToastContainer />
       <div className="d-flex justify-content-center">
         <h1 className="align-self-center">To do list</h1>
       </div>
-      <div className="row mt-5">
-        <div className="col-sm">
+
+      <div className="row mt-5 d-flex justify-content-center">
+        <div className="col-md">
           <Input
             type="text"
             placeholder="Insert your task"
             onChage={handleInputChange}
+            value={task.name}
           />
         </div>
 
         <div className="col-sm">
-          <Input type="date" onChage={handleInputChange} />
+          <Input type="date" onChage={handleInputChange} value={task.date} />
         </div>
 
         <div className="col-sm">
-          <Input type="time" onChage={handleInputChange} />
+          <Input type="time" onChage={handleInputChange} value={task.time} />
         </div>
-        <div className="col-sm">
+        <div className="col-sm d-flex justify-content-around">
           <Button
             text="Add new task"
             isDisabled={isDisaledSubmitButton}
             onSubmit={handleSubmit}
           />
-        </div>
-        <div className="d-flex justify-content-center mt-3">
           <Button
             text="Clear tasks"
             isDisabled={isDisaledResetButton}
