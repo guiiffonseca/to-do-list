@@ -1,6 +1,6 @@
 export type List = {
   index?: number | undefined | null;
   name: string;
-  date: Date | string;
+  date: string;
   time: number | string;
 };

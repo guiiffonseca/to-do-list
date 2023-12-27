@@ -22,16 +22,6 @@ export default function ToDoList() {
     [task]
   );
 
-  const isDisaledSubmitButton = useCallback(() => {
-    if (task.name && task.date && task.time) return false;
-    return true;
-  }, [task.name, task.date, task.time]);
-
-  const isDisaledResetButton = useCallback(() => {
-    if (toDoList.length) return false;
-    return true;
-  }, [toDoList]);
-
   const handleSubmit = useCallback(() => {
     setToDoList([
       ...toDoList,
@@ -50,42 +40,56 @@ export default function ToDoList() {
     setToDoList([]);
   }, []);
 
+  const isDisaledSubmitButton = useCallback(() => {
+    if (task.name && task.date && task.time) return false;
+    return true;
+  }, [task.name, task.date, task.time]);
+
+  const isDisaledResetButton = useCallback(() => {
+    if (toDoList.length) return false;
+    return true;
+  }, [toDoList]);
+
   return (
-    <>
-      <div className="container">
-        <h1>To do list</h1>
-        <div className="row">
-          <div className="col-sm">
-            <Input
-              type="text"
-              placeholder="Insert your task"
-              onChage={handleInputChange}
-            />
-          </div>
+    <div className="container mt-5">
+      <div className="d-flex justify-content-center">
+        <h1 className="align-self-center">To do list</h1>
+      </div>
+      <div className="row mt-5">
+        <div className="col-sm">
+          <Input
+            type="text"
+            placeholder="Insert your task"
+            onChage={handleInputChange}
+          />
+        </div>
 
-          <div className="col-sm">
-            <Input type="date" onChage={handleInputChange} />
-          </div>
+        <div className="col-sm">
+          <Input type="date" onChage={handleInputChange} />
+        </div>
 
-          <div className="col-sm">
-            <Input type="time" onChage={handleInputChange} />
-          </div>
+        <div className="col-sm">
+          <Input type="time" onChage={handleInputChange} />
+        </div>
+        <div className="col-sm">
+          <Button
+            text="Add new task"
+            isDisabled={isDisaledSubmitButton}
+            onSubmit={handleSubmit}
+          />
+        </div>
+        <div className="d-flex justify-content-center mt-3">
+          <Button
+            text="Clear tasks"
+            isDisabled={isDisaledResetButton}
+            onSubmit={handleReset}
+          />
         </div>
       </div>
 
-      <Button
-        text="Add new task"
-        isDisabled={isDisaledSubmitButton}
-        onSubmit={handleSubmit}
-      />
-
-      <Table toDoList={toDoList} />
-
-      <Button
-        text="Clear tasks"
-        isDisabled={isDisaledResetButton}
-        onSubmit={handleReset}
-      />
-    </>
+      <div className="mt-5">
+        <Table toDoList={toDoList} />
+      </div>
+    </div>
   );
 }
