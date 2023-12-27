@@ -1,3 +1,5 @@
+import { SlPencil } from 'react-icons/sl';
+import { AiOutlineDelete } from 'react-icons/ai';
 import { List } from '../types/list';
 
 interface Props {
@@ -9,23 +11,31 @@ export default function Table({ toDoList }: Props) {
 
   return (
     <div className="table-responsive">
-      <table className="table table-dark table-striped table-hover">
+      <table className="table able-striped table-dark table-hover align-middle">
         <thead>
-          <tr>
-            <td>ID</td>
+          <tr className="text-center">
             <td>Task</td>
             <td>Date</td>
             <td>Hour</td>
+            <td className="text-center">Actions</td>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="">
           {toDoList.map((task) => {
             return (
-              <tr key={task.index}>
-                <td key={task.index}>{task.index}</td>
+              <tr className="text-center" key={task.index}>
                 <td key={task.index}>{task.name}</td>
                 <td key={task.index}>{task.date}</td>
                 <td key={task.index}>{task.time}</td>
+
+                <td>
+                  <button type="button" className="btn btn-danger rounded mx-2">
+                    <AiOutlineDelete size={18} backgorundColor="blue" />
+                  </button>
+                  <button type="button" className="btn btn-success rounded">
+                    <SlPencil size={18} />
+                  </button>
+                </td>
               </tr>
             );
           })}
