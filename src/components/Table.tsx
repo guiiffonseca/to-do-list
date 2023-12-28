@@ -1,6 +1,7 @@
 import { SlPencil } from 'react-icons/sl';
 import { AiOutlineDelete } from 'react-icons/ai';
 import { List } from '../types/list';
+import formatDate from '../helpers/dateMask';
 
 interface Props {
   toDoList: List[];
@@ -27,7 +28,7 @@ export default function Table({ toDoList, updateTask, deleteTask }: Props) {
             return (
               <tr className="text-center" key={task.index}>
                 <td>{task.name}</td>
-                <td>{task.date}</td>
+                <td>{formatDate(task.date)}</td>
                 <td>{task.time}</td>
 
                 <td>
