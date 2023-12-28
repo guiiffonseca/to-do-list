@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { toast } from 'react-toastify';
 import { List } from './types/list';
 import { Event } from './types/event';
@@ -6,6 +6,7 @@ import Form from './components/Form';
 import Table from './components/Table';
 import Button from './components/Button';
 import Modal from './components/Modal';
+import Loading from './components/Loading';
 
 type InputType = {
   [key: string]: () => void;
@@ -13,6 +14,7 @@ type InputType = {
 
 export default function ToDoList() {
   const [toDoList, setToDoList] = useState<List[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
   const [task, setTask] = useState<List>({
     name: '',
     date: '',
@@ -51,21 +53,25 @@ export default function ToDoList() {
   );
 
   const handleSubmit = useCallback(() => {
-    setToDoList([
-      ...toDoList,
-      {
-        index: toDoList.length + 1,
-        name: task.name,
-        date: task.date,
-        time: task.time,
-      },
-    ]);
+    setLoading(true);
 
-    toast.success('Task added successfully!', {
-      position: toast.POSITION.TOP_RIGHT,
-    });
+    setTimeout(() => {
+      setLoading(false);
+      setToDoList([
+        ...toDoList,
+        {
+          index: toDoList.length + 1,
+          name: task.name,
+          date: task.date,
+          time: task.time,
+        },
+      ]);
 
-    setTask({ name: '', date: '', time: '' });
+      setTask({ name: '', date: '', time: '' });
+      toast.success('Task added successfully!', {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+    }, 1000);
   }, [task, toDoList]);
 
   const handleUpdate = useCallback(
@@ -81,22 +87,21 @@ export default function ToDoList() {
     [toDoList]
   );
 
-  useEffect(() => {
-    console.log(toDoList);
-  }, [toDoList]);
-
-  console.log(toDoList);
-
   const onSubmitUpdate = useCallback(() => {
     const taskId = selectedTask?.index;
+    setLoading(true);
 
     if (taskId) {
-      toDoList[taskId - 1] = {
-        index: taskId,
-        name: selectedTask.name,
-        date: selectedTask.date,
-        time: selectedTask.time,
-      };
+      setTimeout(() => {
+        toDoList[taskId - 1] = {
+          index: taskId,
+          name: selectedTask.name,
+          date: selectedTask.date,
+          time: selectedTask.time,
+        };
+
+        setLoading(false);
+      }, 1000);
     }
   }, [toDoList, selectedTask]);
 
@@ -138,7 +143,11 @@ export default function ToDoList() {
       </div>
 
       <div className="mt-5">
-        <Table toDoList={toDoList} updateTask={handleUpdate} />
+        {loading ? (
+          <Loading />
+        ) : (
+          <Table toDoList={toDoList} updateTask={handleUpdate} />
+        )}
       </div>
 
       <Modal
