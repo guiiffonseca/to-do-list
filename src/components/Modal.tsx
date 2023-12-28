@@ -5,9 +5,10 @@ import Form from './Form';
 interface Props {
   data: List;
   onChage: (e: Event) => void;
+  onSubmit: (id: number | null | undefined) => void;
 }
 
-export default function Modal({ data, onChage }: Props) {
+export default function Modal({ data, onChage, onSubmit }: Props) {
   return (
     <div
       className="modal fade"
@@ -33,7 +34,11 @@ export default function Modal({ data, onChage }: Props) {
             <Form value={data} onChage={onChage} />
           </div>
           <div className="modal-footer">
-            <button type="button" className="btn btn-success">
+            <button
+              type="button"
+              className="btn btn-success"
+              onClick={() => onSubmit(data.index)}
+            >
               Save changes
             </button>
           </div>

@@ -7,6 +7,10 @@ import Table from './components/Table';
 import Button from './components/Button';
 import Modal from './components/Modal';
 
+type InputType = {
+  [key: string]: () => void;
+};
+
 export default function ToDoList() {
   const [toDoList, setToDoList] = useState<List[]>([]);
   const [task, setTask] = useState<List>({
@@ -17,9 +21,13 @@ export default function ToDoList() {
 
   const handleInputChange = useCallback(
     (e: Event) => {
-      if (e.target.type === 'text') setTask({ ...task, name: e.target.value });
-      if (e.target.type === 'date') setTask({ ...task, date: e.target.value });
-      if (e.target.type === 'time') setTask({ ...task, time: e.target.value });
+      const inputType: InputType = {
+        text: () => setTask({ ...task, name: e.target.value }),
+        date: () => setTask({ ...task, date: e.target.value }),
+        time: () => setTask({ ...task, time: e.target.value }),
+      };
+
+      return inputType[e.target.type]?.();
     },
     [task]
   );
@@ -45,14 +53,38 @@ export default function ToDoList() {
   const handleUpdate = useCallback(
     (id: number | null | undefined) => {
       if (id) {
-        const filterdTask: List[] = toDoList.filter(
+        const findTask: List[] = toDoList.filter(
           ({ index }: List) => index === id
         );
 
-        setTask(filterdTask[0]);
+        setTask(findTask[0]);
       }
     },
     [toDoList]
+  );
+
+  const onSubmitUpdate = useCallback(
+    (id: number | null | undefined) => {
+      if (id) {
+        const filteresTasks: List[] = toDoList.filter(
+          ({ index }: List) => index !== id
+        );
+
+        const updatedList = filteresTasks.map((e: List) => {
+          return [
+            {
+              index: e.index,
+              name: task.name,
+              date: task.date,
+              time: task.time,
+            },
+          ];
+        });
+
+        // setToDoList(updatedList);
+      }
+    },
+    [toDoList, task.date, task.name, task.time]
   );
 
   const handleReset = useCallback(() => {
@@ -96,7 +128,11 @@ export default function ToDoList() {
         <Table toDoList={toDoList} updateTask={handleUpdate} />
       </div>
 
-      <Modal data={task} onChage={(e: Event) => handleInputChange(e)} />
+      <Modal
+        data={task}
+        onChage={(e: Event) => handleInputChange(e)}
+        onSubmit={onSubmitUpdate}
+      />
     </div>
   );
 }
