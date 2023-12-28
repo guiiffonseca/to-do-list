@@ -18,6 +18,11 @@ export default function ToDoList() {
     date: '',
     time: '',
   });
+  const [selectedTask, setSelectedTask] = useState<List>({
+    name: '',
+    date: '',
+    time: '',
+  });
 
   const handleInputChange = useCallback(
     (e: Event) => {
@@ -25,6 +30,19 @@ export default function ToDoList() {
         text: () => setTask({ ...task, name: e.target.value }),
         date: () => setTask({ ...task, date: e.target.value }),
         time: () => setTask({ ...task, time: e.target.value }),
+      };
+
+      return inputType[e.target.type]?.();
+    },
+    [task]
+  );
+
+  const handleModalInputChange = useCallback(
+    (e: Event) => {
+      const inputType: InputType = {
+        text: () => setSelectedTask({ ...task, name: e.target.value }),
+        date: () => setSelectedTask({ ...task, date: e.target.value }),
+        time: () => setSelectedTask({ ...task, time: e.target.value }),
       };
 
       return inputType[e.target.type]?.();
@@ -51,13 +69,13 @@ export default function ToDoList() {
   }, [task, toDoList]);
 
   const handleUpdate = useCallback(
-    (id: number | null | undefined) => {
-      if (id) {
+    (idTask: number | null | undefined) => {
+      if (idTask) {
         const findTask: List[] = toDoList.filter(
-          ({ index }: List) => index === id
+          ({ index }: List) => index === idTask
         );
 
-        setTask(findTask[0]);
+        setSelectedTask(findTask[0]);
       }
     },
     [toDoList]
@@ -129,8 +147,8 @@ export default function ToDoList() {
       </div>
 
       <Modal
-        data={task}
-        onChage={(e: Event) => handleInputChange(e)}
+        data={selectedTask}
+        onChage={(e: Event) => handleModalInputChange(e)}
         onSubmit={onSubmitUpdate}
       />
     </div>
