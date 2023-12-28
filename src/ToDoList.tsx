@@ -105,6 +105,30 @@ export default function ToDoList() {
     }
   }, [toDoList, selectedTask]);
 
+  const onDelTask = useCallback(
+    (idTask: number | null | undefined) => {
+      const findTask: List[] = toDoList.filter(
+        ({ index }: List) => index === idTask
+      );
+
+      const indexTask = findTask[0].index;
+
+      setLoading(true);
+
+      if (indexTask) {
+        setTimeout(() => {
+          setLoading(false);
+          const filteredArr: List[] = toDoList.filter(
+            ({ index }: List) => index !== indexTask
+          );
+
+          setToDoList(filteredArr);
+        }, 1000);
+      }
+    },
+    [toDoList]
+  );
+
   const handleReset = useCallback(() => {
     setToDoList([]);
   }, []);
@@ -146,7 +170,11 @@ export default function ToDoList() {
         {loading ? (
           <Loading />
         ) : (
-          <Table toDoList={toDoList} updateTask={handleUpdate} />
+          <Table
+            toDoList={toDoList}
+            updateTask={handleUpdate}
+            deleteTask={onDelTask}
+          />
         )}
       </div>
 

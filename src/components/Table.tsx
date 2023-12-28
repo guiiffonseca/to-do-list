@@ -5,9 +5,10 @@ import { List } from '../types/list';
 interface Props {
   toDoList: List[];
   updateTask: (id: number | undefined | null) => void;
+  deleteTask: (id: number | undefined | null) => void;
 }
 
-export default function Table({ toDoList, updateTask }: Props) {
+export default function Table({ toDoList, updateTask, deleteTask }: Props) {
   if (!toDoList.length) return <h3>No tasks so far</h3>;
 
   return (
@@ -30,8 +31,12 @@ export default function Table({ toDoList, updateTask }: Props) {
                 <td>{task.time}</td>
 
                 <td>
-                  <button type="button" className="btn btn-danger rounded mx-2">
-                    <AiOutlineDelete size={18} backgorundColor="blue" />
+                  <button
+                    type="button"
+                    className="btn btn-danger rounded mx-2"
+                    onClick={() => deleteTask(task?.index)}
+                  >
+                    <AiOutlineDelete size={18} />
                   </button>
 
                   <button
