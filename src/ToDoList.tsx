@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { List } from './types/list';
 import { Event } from './types/event';
@@ -40,14 +40,14 @@ export default function ToDoList() {
   const handleModalInputChange = useCallback(
     (e: Event) => {
       const inputType: InputType = {
-        text: () => setSelectedTask({ ...task, name: e.target.value }),
-        date: () => setSelectedTask({ ...task, date: e.target.value }),
-        time: () => setSelectedTask({ ...task, time: e.target.value }),
+        text: () => setSelectedTask({ ...selectedTask, name: e.target.value }),
+        date: () => setSelectedTask({ ...selectedTask, date: e.target.value }),
+        time: () => setSelectedTask({ ...selectedTask, time: e.target.value }),
       };
 
       return inputType[e.target.type]?.();
     },
-    [task]
+    [selectedTask]
   );
 
   const handleSubmit = useCallback(() => {
@@ -81,29 +81,24 @@ export default function ToDoList() {
     [toDoList]
   );
 
-  const onSubmitUpdate = useCallback(
-    (id: number | null | undefined) => {
-      if (id) {
-        const filteresTasks: List[] = toDoList.filter(
-          ({ index }: List) => index !== id
-        );
+  useEffect(() => {
+    console.log(toDoList);
+  }, [toDoList]);
 
-        const updatedList = filteresTasks.map((e: List) => {
-          return [
-            {
-              index: e.index,
-              name: task.name,
-              date: task.date,
-              time: task.time,
-            },
-          ];
-        });
+  console.log(toDoList);
 
-        // setToDoList(updatedList);
-      }
-    },
-    [toDoList, task.date, task.name, task.time]
-  );
+  const onSubmitUpdate = useCallback(() => {
+    const taskId = selectedTask?.index;
+
+    if (taskId) {
+      toDoList[taskId - 1] = {
+        index: taskId,
+        name: selectedTask.name,
+        date: selectedTask.date,
+        time: selectedTask.time,
+      };
+    }
+  }, [toDoList, selectedTask]);
 
   const handleReset = useCallback(() => {
     setToDoList([]);

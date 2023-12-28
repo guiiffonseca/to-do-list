@@ -25,11 +25,11 @@ export default function Table({ toDoList, updateTask }: Props) {
           {toDoList.map((task) => {
             return (
               <tr className="text-center" key={task.index}>
-                <td key={task.index}>{task.name}</td>
-                <td key={task.index}>{task.date}</td>
-                <td key={task.index}>{task.time}</td>
+                <td>{task.name}</td>
+                <td>{task.date}</td>
+                <td>{task.time}</td>
 
-                <td key={task.index}>
+                <td>
                   <button type="button" className="btn btn-danger rounded mx-2">
                     <AiOutlineDelete size={18} backgorundColor="blue" />
                   </button>

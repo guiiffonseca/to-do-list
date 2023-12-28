@@ -5,7 +5,7 @@ import Form from './Form';
 interface Props {
   data: List;
   onChage: (e: Event) => void;
-  onSubmit: (id: number | null | undefined) => void;
+  onSubmit: () => void;
 }
 
 export default function Modal({ data, onChage, onSubmit }: Props) {
@@ -37,7 +37,8 @@ export default function Modal({ data, onChage, onSubmit }: Props) {
             <button
               type="button"
               className="btn btn-success"
-              onClick={() => onSubmit(data.index)}
+              data-bs-dismiss="modal"
+              onClick={onSubmit}
             >
               Save changes
             </button>
